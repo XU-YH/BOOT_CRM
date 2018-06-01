@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>BOOT_CRM</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<!-- 配置 spring -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:config/spring/applicationContext-*.xml</param-value>
+	</context-param>
+
+	<!-- 配置监听器，可以让spring容器随项目的启动而创建，随项目的关闭而销毁，自动将spring容器添加到servletContext域中 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 配置过滤器，解决post提交乱码问题 -->
+	<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<!-- 设置编码为UTF-8 -->
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置 springmvc -->
+	<servlet>
+		<servlet-name>BOOT-CRM</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:config/spring/springmvc.xml</param-value>
+		</init-param>
+		<!-- 配置springmvc什么时候启动，参数必须为整数 -->
+		<!-- 如果为0或者大于0，则springMVC随着容器启动而启动 -->
+		<!-- 如果小于0，则在第一次请求进来的时候启动 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BOOT-CRM</servlet-name>
+		<!-- 所有以action结尾的请求都将进入springmvc -->
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>
